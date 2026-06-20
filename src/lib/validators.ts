@@ -1,8 +1,14 @@
 import { z } from "zod";
 
-/** Turn "" / null into undefined, then coerce to number. For optional numerics. */
+/**
+ * Turn "" / null / a missing key into undefined, then coerce to number.
+ * `.nullish()` is what makes the *object key* optional in Zod v4 — a union that
+ * merely includes `z.undefined()` no longer does (so a missing `amountMl` on a
+ * breastfeed, or a missing `durationMinutes` on a bottle, would otherwise fail).
+ */
 const optionalNumber = z
-  .union([z.string(), z.number(), z.null(), z.undefined()])
+  .union([z.string(), z.number()])
+  .nullish()
   .transform((v) => {
     if (v === "" || v === null || v === undefined) return undefined;
     const n = typeof v === "number" ? v : Number(v);
@@ -17,7 +23,8 @@ const dateFromInput = z
   .refine((d) => !Number.isNaN(d.getTime()), { message: "Invalid date/time" });
 
 const optionalDateFromInput = z
-  .union([z.string(), z.date(), z.null(), z.undefined()])
+  .union([z.string(), z.date()])
+  .nullish()
   .transform((v) => {
     if (v === "" || v === null || v === undefined) return undefined;
     return v instanceof Date ? v : new Date(v);
