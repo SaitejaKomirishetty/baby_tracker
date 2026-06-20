@@ -28,6 +28,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/ui/select";
 import { Segmented } from "@/components/ui/segmented";
+import { DateTimeField } from "@/components/ui/datetime-field";
 import { toDateTimeLocal } from "@/lib/format";
 
 type ActionFn = (
@@ -139,8 +140,7 @@ export function LogForm({ type, babyId, item, onDone }: LogFormProps) {
             />
           </Field>
           <Field label="Start time">
-            <Input
-              type="datetime-local"
+            <DateTimeField
               name="startTime"
               defaultValue={dt(item?.startTime)}
               required
@@ -201,8 +201,7 @@ export function LogForm({ type, babyId, item, onDone }: LogFormProps) {
             />
           </Field>
           <Field label="Time">
-            <Input
-              type="datetime-local"
+            <DateTimeField
               name="time"
               defaultValue={dt(item?.time)}
               required
@@ -214,16 +213,14 @@ export function LogForm({ type, babyId, item, onDone }: LogFormProps) {
       {type === "sleep" && (
         <>
           <Field label="Fell asleep">
-            <Input
-              type="datetime-local"
+            <DateTimeField
               name="startTime"
               defaultValue={dt(item?.startTime)}
               required
             />
           </Field>
           <Field label="Woke up (leave blank if still sleeping)">
-            <Input
-              type="datetime-local"
+            <DateTimeField
               name="endTime"
               defaultValue={item?.endTime ? dt(item.endTime) : ""}
             />
@@ -270,8 +267,7 @@ export function LogForm({ type, babyId, item, onDone }: LogFormProps) {
             </Select>
           </Field>
           <Field label="Time">
-            <Input
-              type="datetime-local"
+            <DateTimeField
               name="time"
               defaultValue={dt(item?.time)}
               required
@@ -312,8 +308,7 @@ export function LogForm({ type, babyId, item, onDone }: LogFormProps) {
             />
           </Field>
           <Field label="Time">
-            <Input
-              type="datetime-local"
+            <DateTimeField
               name="time"
               defaultValue={dt(item?.time)}
               required
@@ -354,8 +349,7 @@ export function LogForm({ type, babyId, item, onDone }: LogFormProps) {
             </div>
           </div>
           <Field label="Time">
-            <Input
-              type="datetime-local"
+            <DateTimeField
               name="time"
               defaultValue={dt(item?.time)}
               required
@@ -386,8 +380,7 @@ export function LogForm({ type, babyId, item, onDone }: LogFormProps) {
             />
           </Field>
           <Field label="Time">
-            <Input
-              type="datetime-local"
+            <DateTimeField
               name="time"
               defaultValue={dt(item?.time)}
               required

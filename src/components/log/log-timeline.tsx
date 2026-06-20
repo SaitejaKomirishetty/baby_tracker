@@ -48,6 +48,12 @@ export function LogTimeline({
   const router = useRouter();
   const [editing, setEditing] = React.useState<TimelineItemDTO | null>(null);
   const [pendingDelete, startDelete] = React.useTransition();
+  // Times/dates are formatted in the viewer's timezone, which the server can't
+  // know — so we render a skeleton until mount to keep the server and first
+  // client render identical (avoids a hydration mismatch when the server runs
+  // in a different timezone than the browser).
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
 
   function canMutate(item: TimelineItemDTO) {
     return editable && (isOwner || item.loggedByUserId === currentUserId);
@@ -77,6 +83,10 @@ export function LogTimeline({
         Nothing logged yet. Tap the + button to add your first entry.
       </p>
     );
+  }
+
+  if (!mounted) {
+    return <TimelineSkeleton count={Math.min(items.length, 8)} />;
   }
 
   return (
@@ -162,6 +172,27 @@ export function LogTimeline({
           )}
         </DrawerContent>
       </Drawer>
+    </div>
+  );
+}
+
+/** Placeholder shown until mount, so SSR and first client render match. */
+function TimelineSkeleton({ count }: { count: number }) {
+  return (
+    <div className="flex animate-pulse flex-col gap-1.5" aria-hidden>
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-3 rounded-xl border border-border bg-card p-3"
+        >
+          <span className="h-9 w-9 shrink-0 rounded-full bg-muted" />
+          <div className="flex-1 space-y-2">
+            <div className="h-3 w-1/2 rounded bg-muted" />
+            <div className="h-2.5 w-1/3 rounded bg-muted" />
+          </div>
+          <div className="h-3 w-12 rounded bg-muted" />
+        </div>
+      ))}
     </div>
   );
 }

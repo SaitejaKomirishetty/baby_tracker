@@ -1,6 +1,15 @@
 import { z } from "zod";
 
 /**
+ * Treat "" (what a `<select>`'s placeholder option submits) and null as "not
+ * provided" before applying an optional enum. Plain `z.enum(...).optional()`
+ * rejects "" because optional only permits a *missing* key, not an empty
+ * string. Inlined per field (rather than a generic helper) so the literal
+ * union output type is preserved for Drizzle inserts.
+ */
+const emptyToUndefined = (v: unknown) => (v === "" || v === null ? undefined : v);
+
+/**
  * Turn "" / null / a missing key into undefined, then coerce to number.
  * `.nullish()` is what makes the *object key* optional in Zod v4 — a union that
  * merely includes `z.undefined()` no longer does (so a missing `amountMl` on a
@@ -90,7 +99,10 @@ export const feedSchema = z.object({
   type: z.enum(["breast", "bottle"]),
   startTime: dateFromInput,
   durationMinutes: optionalNumber,
-  side: z.enum(["left", "right", "both"]).optional(),
+  side: z.preprocess(
+    emptyToUndefined,
+    z.enum(["left", "right", "both"]).optional()
+  ),
   amountMl: optionalNumber,
   note: z.string().max(500).optional(),
 });
@@ -118,7 +130,10 @@ export const temperatureSchema = z.object({
     .transform((v) => Number(v))
     .pipe(z.number().min(25).max(45).or(z.number().min(77).max(113))),
   unit: z.enum(["c", "f"]).default("c"),
-  method: z.enum(["armpit", "oral", "ear", "forehead", "rectal"]).optional(),
+  method: z.preprocess(
+    emptyToUndefined,
+    z.enum(["armpit", "oral", "ear", "forehead", "rectal"]).optional()
+  ),
   time: dateFromInput,
   note: z.string().max(500).optional(),
 });
