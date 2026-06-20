@@ -1,26 +1,212 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
+/* ------------------------------------------------------------------ */
+/*  "A nightlight, not a screen" — warm nocturne (dark, the star)      */
+/*  and a cream daytime-nursery light mode. Zero blue light.           */
+/* ------------------------------------------------------------------ */
+
+/* Light mode — Daybreak: warm cream nursery */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: oklch(0.96 0.015 75);
+  --foreground: oklch(0.31 0.03 50);
+  --card: oklch(0.99 0.008 80);
+  --card-foreground: oklch(0.31 0.03 50);
+  --popover: oklch(0.99 0.008 80);
+  --popover-foreground: oklch(0.31 0.03 50);
+  --primary: oklch(0.7 0.13 62);
+  --primary-foreground: oklch(0.99 0.01 80);
+  --secondary: oklch(0.93 0.018 75);
+  --secondary-foreground: oklch(0.34 0.03 55);
+  --muted: oklch(0.93 0.018 75);
+  --muted-foreground: oklch(0.52 0.03 58);
+  --accent: oklch(0.92 0.03 70);
+  --accent-foreground: oklch(0.34 0.03 55);
+  --destructive: oklch(0.6 0.16 35);
+  --destructive-foreground: oklch(0.99 0.01 80);
+  --border: oklch(0.88 0.018 72);
+  --input: oklch(0.9 0.018 72);
+  --ring: oklch(0.7 0.13 62);
+
+  --feed: oklch(0.7 0.13 75);
+  --diaper: oklch(0.68 0.1 88);
+  --sleep: oklch(0.56 0.08 330);
+  --temp: oklch(0.62 0.15 40);
+  --growth: oklch(0.6 0.08 145);
+  --med: oklch(0.62 0.1 12);
+  --note: oklch(0.55 0.03 60);
+
+  --glow: oklch(0.7 0.13 62 / 0.35);
+
+  --radius: 1.5rem;
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-hanken);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Dark mode — Nocturne: warm dim room lit by an amber nightlight */
+.dark {
+  --background: oklch(0.18 0.012 52);
+  --foreground: oklch(0.93 0.018 72);
+  --card: oklch(0.22 0.014 54);
+  --card-foreground: oklch(0.93 0.018 72);
+  --popover: oklch(0.22 0.014 54);
+  --popover-foreground: oklch(0.93 0.018 72);
+  --primary: oklch(0.79 0.13 70);
+  --primary-foreground: oklch(0.21 0.03 55);
+  --secondary: oklch(0.27 0.016 56);
+  --secondary-foreground: oklch(0.93 0.018 72);
+  --muted: oklch(0.27 0.016 56);
+  --muted-foreground: oklch(0.72 0.025 66);
+  --accent: oklch(0.3 0.02 60);
+  --accent-foreground: oklch(0.93 0.018 72);
+  --destructive: oklch(0.66 0.16 36);
+  --destructive-foreground: oklch(0.99 0.01 80);
+  --border: oklch(0.31 0.014 56);
+  --input: oklch(0.33 0.016 56);
+  --ring: oklch(0.79 0.13 70);
+
+  --feed: oklch(0.82 0.12 78);
+  --diaper: oklch(0.8 0.1 90);
+  --sleep: oklch(0.66 0.08 330);
+  --temp: oklch(0.72 0.15 40);
+  --growth: oklch(0.74 0.09 148);
+  --med: oklch(0.74 0.1 14);
+  --note: oklch(0.72 0.025 64);
+
+  --glow: oklch(0.82 0.14 72 / 0.45);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-feed: var(--feed);
+  --color-diaper: var(--diaper);
+  --color-sleep: var(--sleep);
+  --color-temp: var(--temp);
+  --color-growth: var(--growth);
+  --color-med: var(--med);
+  --color-note: var(--note);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 0.6rem);
+  --radius-sm: calc(var(--radius) - 0.9rem);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  min-height: 100dvh;
+  overscroll-behavior-y: none;
+}
+
+/* The amber nightlight in the dark room — a faint warm wash from the top. */
+.dark body {
+  background-image: radial-gradient(
+    120% 60% at 50% -10%,
+    oklch(0.82 0.13 72 / 0.08),
+    transparent 60%
+  );
+  background-attachment: fixed;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+/* Signature: a soft radial glow, as if a small lamp sat behind the element. */
+.nightlight {
+  box-shadow: 0 0 0 1px var(--color-border), 0 8px 40px -12px var(--glow);
+}
+.glow-ring {
+  filter: drop-shadow(0 0 10px var(--glow));
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Gentle entrance for the dashboard focal. */
+@keyframes lamp-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.lamp-in {
+  animation: lamp-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* The sleep lamp breathes while a session is active. */
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+.breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lamp-in,
+  .breathe {
+    animation: none;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
 }

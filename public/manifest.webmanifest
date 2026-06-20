@@ -1,0 +1,26 @@
+{
+  "name": "Nestling — Baby Tracker",
+  "short_name": "Nestling",
+  "description": "Track feeds, sleep, diapers, growth and more. Built for one-handed, late-night logging.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#15151f",
+  "theme_color": "#15151f",
+  "categories": ["health", "lifestyle", "parenting"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
