@@ -47,10 +47,15 @@ export const users = pgTable("user", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   email: text("email").unique().notNull(),
-  emailVerified: timestamp("email_verified", { mode: "date" }),
+  emailVerified: timestamp("email_verified", {
+    mode: "date",
+    withTimezone: true,
+  }),
   image: text("image"),
   passwordHash: text("password_hash"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 export const accounts = pgTable(
@@ -80,7 +85,7 @@ export const sessions = pgTable("session", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
+  expires: timestamp("expires", { mode: "date", withTimezone: true }).notNull(),
 });
 
 export const verificationTokens = pgTable(
@@ -88,7 +93,7 @@ export const verificationTokens = pgTable(
   {
     identifier: text("identifier").notNull(),
     token: text("token").notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
+    expires: timestamp("expires", { mode: "date", withTimezone: true }).notNull(),
   },
   (vt) => [primaryKey({ columns: [vt.identifier, vt.token] })]
 );
@@ -103,7 +108,9 @@ export const households = pgTable("households", {
   createdByUserId: text("created_by_user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 export const householdMembers = pgTable(
@@ -117,7 +124,9 @@ export const householdMembers = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     role: memberRoleEnum("role").notNull().default("caregiver"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [
     uniqueIndex("household_members_household_user_unique").on(
@@ -141,12 +150,14 @@ export const invites = pgTable(
     createdByUserId: text("created_by_user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    expiresAt: timestamp("expires_at").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
     acceptedByUserId: text("accepted_by_user_id").references(() => users.id, {
       onDelete: "set null",
     }),
-    acceptedAt: timestamp("accepted_at"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    acceptedAt: timestamp("accepted_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("invites_household_idx").on(t.householdId)]
 );
@@ -172,7 +183,9 @@ export const babies = pgTable(
     createdByUserId: text("created_by_user_id")
       .notNull()
       .references(() => users.id, { onDelete: "set null" }),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("babies_household_idx").on(t.householdId)]
 );
@@ -192,12 +205,14 @@ export const feedLogs = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "set null" }),
     type: feedTypeEnum("type").notNull(),
-    startTime: timestamp("start_time").notNull(),
+    startTime: timestamp("start_time", { withTimezone: true }).notNull(),
     durationMinutes: integer("duration_minutes"),
     side: feedSideEnum("side"),
     amountMl: real("amount_ml"),
     note: text("note"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("feed_logs_baby_time_idx").on(t.babyId, t.startTime)]
 );
@@ -213,9 +228,11 @@ export const diaperLogs = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "set null" }),
     type: diaperTypeEnum("type").notNull(),
-    time: timestamp("time").notNull(),
+    time: timestamp("time", { withTimezone: true }).notNull(),
     note: text("note"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("diaper_logs_baby_time_idx").on(t.babyId, t.time)]
 );
@@ -230,10 +247,12 @@ export const sleepLogs = pgTable(
     loggedByUserId: text("logged_by_user_id")
       .notNull()
       .references(() => users.id, { onDelete: "set null" }),
-    startTime: timestamp("start_time").notNull(),
-    endTime: timestamp("end_time"),
+    startTime: timestamp("start_time", { withTimezone: true }).notNull(),
+    endTime: timestamp("end_time", { withTimezone: true }),
     note: text("note"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("sleep_logs_baby_time_idx").on(t.babyId, t.startTime)]
 );
@@ -251,9 +270,11 @@ export const temperatureLogs = pgTable(
     value: real("value").notNull(),
     unit: tempUnitEnum("unit").notNull().default("c"),
     method: tempMethodEnum("method"),
-    time: timestamp("time").notNull(),
+    time: timestamp("time", { withTimezone: true }).notNull(),
     note: text("note"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("temperature_logs_baby_time_idx").on(t.babyId, t.time)]
 );
@@ -268,12 +289,14 @@ export const growthLogs = pgTable(
     loggedByUserId: text("logged_by_user_id")
       .notNull()
       .references(() => users.id, { onDelete: "set null" }),
-    time: timestamp("time").notNull(),
+    time: timestamp("time", { withTimezone: true }).notNull(),
     weightGrams: real("weight_grams"),
     heightCm: real("height_cm"),
     headCircumferenceCm: real("head_circumference_cm"),
     note: text("note"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("growth_logs_baby_time_idx").on(t.babyId, t.time)]
 );
@@ -291,9 +314,11 @@ export const medicationLogs = pgTable(
     name: text("name").notNull(),
     doseAmount: real("dose_amount"),
     doseUnit: text("dose_unit"),
-    time: timestamp("time").notNull(),
+    time: timestamp("time", { withTimezone: true }).notNull(),
     note: text("note"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("medication_logs_baby_time_idx").on(t.babyId, t.time)]
 );
@@ -308,10 +333,12 @@ export const notes = pgTable(
     loggedByUserId: text("logged_by_user_id")
       .notNull()
       .references(() => users.id, { onDelete: "set null" }),
-    time: timestamp("time").notNull(),
+    time: timestamp("time", { withTimezone: true }).notNull(),
     text: text("text").notNull(),
     tags: text("tags").array(),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   },
   (t) => [index("notes_baby_time_idx").on(t.babyId, t.time)]
 );
