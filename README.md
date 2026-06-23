@@ -17,6 +17,41 @@ Zod**.
 
 ---
 
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/dashboard.png" alt="Dashboard with the glowing 'time since last feed' focal" /><br/>
+      <sub><b>Dashboard</b> — glanceable feed timer</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/quicklog.png" alt="Quick-log bottom sheet" /><br/>
+      <sub><b>Quick log</b> — one-tap bottom sheet</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/log.png" alt="Log timeline grouped by day" /><br/>
+      <sub><b>Log</b> — editable timeline</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/analytics.png" alt="Analytics charts" /><br/>
+      <sub><b>Analytics</b> — feeding & sleep trends</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/settings.png" alt="Settings with household roles" /><br/>
+      <sub><b>Settings</b> — babies, roles & theme</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/login.png" alt="Sign-in screen" /><br/>
+      <sub><b>Sign in</b> — the nightlight identity</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## Features
 
 - **Mobile-first UX** — bottom navigation, 44px+ tap targets, bottom-sheet forms
